@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="#FFFFFF"
+        android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/def_margin_half"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:textColor="@color/Black"
+                android:text="Cari berita"/>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/def_margin"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent" android:layout_height="wrap_content">
+
+            <ImageView
+                    android:layout_weight="1"
+                    android:scaleType="fitStart"
+                    android:src="@drawable/ic_search_clip_art"
+                    android:layout_width="25dp"
+                    android:layout_height="35dp"/>
+
+            <EditText
+                    android:id="@+id/inpt_search_article"
+                    android:layout_weight="10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Cari judul artikel"
+                    android:padding="16dp"
+                    android:background="@drawable/rounded_edit_text"/>
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_listArticle"
+                android:layout_marginTop="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</ScrollView>

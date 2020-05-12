@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+        <!--Action bar-->
+        <LinearLayout
+                android:layout_margin="30dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <LinearLayout
+                    android:layout_weight="5"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="normal"
+                        android:textColor="#BFC4E9"
+                        android:text="MAY 11TH"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/def_margin_half"
+                        android:textStyle="bold"
+                        android:textSize="24sp"
+                        android:textColor="@color/Black"
+                        android:text="Hai, Selamat Pagi"/>
+
+            </LinearLayout>
+
+            <ImageView
+                    android:id="@+id/logo"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <ImageView
+                android:id="@+id/head"
+                android:layout_width="match_parent"
+                android:layout_height="168dp"
+                android:paddingHorizontal="30dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/Black"
+                android:textSize="20sp"
+                android:layout_marginHorizontal="30dp"
+                android:text="Kamu harus tahu"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_listArticleHorizontal"
+                android:layout_marginTop="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_listArticle"
+                android:layout_marginTop="25dp"
+                android:layout_marginHorizontal="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+
+</ScrollView>
