@@ -45,4 +45,13 @@ class ArticleAdapter(private val context: Context, private val items: ArrayList<
         holder.bindItem(items.get(position))
     }
 
+    fun <T : RecyclerView.ViewHolder> T.listen(
+        event: (position: Int, type: Int) -> Unit
+    ): T {
+        itemView.setOnClickListener {
+            event.invoke(getAdapterPosition(), getItemViewType())
+        }
+        return this
+    }
+
 }
