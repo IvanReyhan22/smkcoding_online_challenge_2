@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/White"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        tools:context=".Login">
+
+    <LinearLayout
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ImageView
+                android:id="@+id/ilustration"
+                android:src="@drawable/ic_remote_work_man"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"/>
+
+        <TextView
+                android:id="@+id/login_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="@dimen/def_margin"
+                android:textStyle="bold"
+                android:textColor="@color/Black"
+                android:textSize="24sp"
+                android:textAlignment="center"
+                android:text="Welcome to co.news"/>
+
+        <TextView
+                android:id="@+id/login_caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="@dimen/def_margin"
+                android:textColor="@color/DarkGray"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:lineSpacingExtra="4dp"
+                android:text="Cari tau tentang berita virus covid-19 secara live dari sumber terpercaya"/>
+
+        <LinearLayout
+                android:id="@+id/inpt_email_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:clipToPadding="false"
+                android:gravity="center"
+                android:padding="10dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/rounded_seconday_background">
+
+            <EditText
+                    android:id="@+id/inpt_email"
+                    android:hint="email"
+                    android:textColor="@color/Black"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="@dimen/def_margin_half"
+                    android:layout_marginRight="@dimen/def_margin_half"
+                    android:background="@android:color/transparent"
+                    android:inputType="textEmailAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/inpt_password_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:clipToPadding="false"
+                android:gravity="center"
+                android:padding="10dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/rounded_seconday_background">
+
+            <EditText
+                    android:id="@+id/inpt_password"
+                    android:hint="password"
+                    android:textColor="@color/Black"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="@dimen/def_margin_half"
+                    android:layout_marginRight="@dimen/def_margin_half"
+                    android:background="@android:color/transparent"
+                    android:inputType="textPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <Button
+                android:id="@+id/login_btn"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="80dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="@dimen/def_margin"
+                android:layout_centerHorizontal="true"
+                android:text="Login"
+                android:textStyle="bold"
+                android:textColor="@color/White"
+                android:background="@drawable/rounded_primary_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        <LinearLayout
+                android:gravity="center"
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:text="Belum punya akun? "
+                    android:textColor="@color/DarkGray"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <TextView
+                    android:id="@+id/register_btn"
+                    android:text="Daftar"
+                    android:textStyle="bold"
+                    android:textColor="@color/Primary"
+                    android:layout_marginLeft="4dp"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

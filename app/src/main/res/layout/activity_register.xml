@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Register">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_margin="30dp"
+            android:layout_height="match_parent">
+
+        <ImageView
+                android:id="@+id/back_btn"
+                android:src="@drawable/ic_arrow_back"
+                android:layout_width="30dp"
+                android:layout_height="30dp"/>
+
+        <TextView
+                android:id="@+id/login_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="@dimen/def_margin"
+                android:textStyle="bold"
+                android:textColor="@color/Black"
+                android:textSize="24sp"
+                android:textAlignment="center"
+                android:text="Daftarkan Dirimu"/>
+
+        <TextView
+                android:id="@+id/login_caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/def_margin"
+                android:textColor="@color/DarkGray"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:lineSpacingExtra="4dp"
+                android:text="Cari tau tentang berita virus covid-19 secara live dari sumber terpercaya"/>
+
+        <EditText
+                android:id="@+id/inpt_username"
+                android:hint="Username"
+                android:textColor="@color/Black"
+                android:textSize="20dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/rounded_seconday_background"
+                android:paddingTop="@dimen/def_margin_half"
+                android:paddingBottom="@dimen/def_margin_half"
+                android:paddingLeft="@dimen/def_margin"
+                android:paddingRight="@dimen/def_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        <EditText
+                android:id="@+id/inpt_phone"
+                android:hint="Phone number"
+                android:textColor="@color/Black"
+                android:textSize="20dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/rounded_seconday_background"
+                android:paddingTop="@dimen/def_margin_half"
+                android:paddingBottom="@dimen/def_margin_half"
+                android:paddingLeft="@dimen/def_margin"
+                android:paddingRight="@dimen/def_margin"
+                android:inputType="number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        <EditText
+                android:id="@+id/inpt_email"
+                android:hint="email"
+                android:textColor="@color/Black"
+                android:textSize="20dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/rounded_seconday_background"
+                android:paddingTop="@dimen/def_margin_half"
+                android:paddingBottom="@dimen/def_margin_half"
+                android:paddingLeft="@dimen/def_margin"
+                android:paddingRight="@dimen/def_margin"
+                android:inputType="textEmailAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        <EditText
+                android:id="@+id/inpt_password"
+                android:hint="password"
+                android:textColor="@color/Black"
+                android:textSize="20dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/rounded_seconday_background"
+                android:paddingTop="@dimen/def_margin_half"
+                android:paddingBottom="@dimen/def_margin_half"
+                android:paddingLeft="@dimen/def_margin"
+                android:paddingRight="@dimen/def_margin"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        <Button
+                android:id="@+id/register_btn"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="80dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="@dimen/def_margin"
+                android:layout_centerHorizontal="true"
+                android:text="Daftar"
+                android:textStyle="bold"
+                android:textColor="@color/White"
+                android:background="@drawable/rounded_primary_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        <LinearLayout
+                android:gravity="center"
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:text="Sudah punya akun? "
+                    android:textColor="@color/DarkGray"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <TextView
+                    android:id="@+id/login_btn"
+                    android:text="Login"
+                    android:textStyle="bold"
+                    android:textColor="@color/Primary"
+                    android:layout_marginLeft="4dp"
+                    android:textSize="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

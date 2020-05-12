@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/Primary"
+        tools:context=".ProfileEdit">
+
+    <RelativeLayout
+            android:layout_margin="30dp"
+            android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/back_btn"
+                android:src="@drawable/ic_arrow_back_white"
+                android:layout_width="25dp"
+                android:layout_height="25dp"/>
+
+        <TextView
+                android:text="Edit Profile"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:textAlignment="center"
+                android:textColor="@color/White"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:background="@drawable/rounded_top"
+            android:layout_width="match_parent"
+            android:padding="30dp"
+            android:layout_height="match_parent">
+
+        <ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
+
+            <LinearLayout android:orientation="vertical" android:layout_width="match_parent"
+                          android:layout_height="match_parent">
+
+                <LinearLayout android:layout_weight="1" android:orientation="vertical"
+                              android:layout_width="match_parent"
+                              android:layout_height="wrap_content">
+
+
+                    <androidx.cardview.widget.CardView
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginBottom="30dp"
+                            app:cardElevation="0dp"
+                            app:cardCornerRadius="100dp"
+                            android:layout_width="160dp"
+                            android:layout_height="160dp">
+
+                        <ImageView
+                                android:src="@drawable/other"
+                                android:scaleType="centerCrop"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"/>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                            android:text="Nama"
+                            android:textSize="14sp"
+                            android:textColor="@color/DarkGray"
+                            android:layout_marginBottom="@dimen/def_margin_half"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    <EditText
+                            android:id="@+id/inpt_name"
+                            android:textSize="18dp"
+                            android:textColor="@color/Black"
+                            android:hint="Your Name Here"
+                            android:padding="@dimen/def_margin_half"
+                            android:layout_marginBottom="24dp"
+                            android:background="@drawable/rounded_seconday_background"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    <TextView
+                            android:text="Email"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/DarkGray"
+                            android:layout_marginBottom="@dimen/def_margin_half"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    <EditText
+                            android:id="@+id/inpt_email"
+                            android:hint="Your Email Here"
+                            android:textSize="18dp"
+                            android:padding="@dimen/def_margin_half"
+                            android:textColor="@color/Black"
+                            android:layout_marginBottom="24dp"
+                            android:background="@drawable/rounded_seconday_background"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    <TextView
+                            android:text="Caption"
+                            android:textSize="14sp"
+                            android:textColor="@color/DarkGray"
+                            android:layout_marginBottom="@dimen/def_margin_half"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    <EditText
+                            android:id="@+id/inpt_caption"
+                            android:inputType="text|textMultiLine"
+                            android:hint="Your Caption Here"
+                            android:textSize="18dp"
+                            android:textColor="@color/Black"
+                            android:padding="@dimen/def_margin_half"
+                            android:background="@drawable/rounded_seconday_background"
+                            android:layout_width="match_parent"
+                            android:gravity="top"
+                            android:layout_height="120dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout android:layout_weight="2"
+                              android:layout_marginTop="@dimen/def_margin"
+                              android:orientation="horizontal" android:layout_width="match_parent"
+                              android:layout_height="wrap_content">
+
+                    <Button
+                            android:id="@+id/submit_btn"
+                            android:layout_weight="1"
+                            android:text="Ok"
+                            android:textColor="@color/White"
+                            android:textStyle="bold"
+                            android:textSize="18dp"
+                            android:background="@color/Primary"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+                    <Button
+                            android:id="@+id/cancel_btn"
+                            android:text="cancel"
+                            android:textAllCaps="false"
+                            android:background="@android:color/transparent"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</LinearLayout>

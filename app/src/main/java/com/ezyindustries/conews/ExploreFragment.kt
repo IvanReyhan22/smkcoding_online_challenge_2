@@ -26,7 +26,7 @@ class ExploreFragment : Fragment() {
 
     private fun showArticle() {
         rv_listArticle.layoutManager = LinearLayoutManager(activity)
-        rv_listArticle.adapter = ArticleAdapter(activity!!,articleList,"vertical")
+        rv_listArticle.adapter = ArticleAdapter(activity!!,articleList,"search_result")
     }
 
     private fun initView() {

@@ -15,8 +15,8 @@ class ViewPagerAdapter (fragmentActivity: FragmentActivity): FragmentStateAdapte
 
     override fun createFragment(position: Int): Fragment {
         when (position) {
-            0 -> { return ExploreFragment() }
-            1 -> { return HomeFragment() }
+            0 -> { return HomeFragment() }
+            1 -> { return ExploreFragment() }
             2 -> { return ProfileFragment() }
             else -> {
                 return HomeFragment()
