@@ -8,33 +8,17 @@ import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ezyindustries.conews.Adapter.ArticleAdapter
-import com.ezyindustries.conews.Data.Article
+import com.ezyindustries.conews.Data.ArticleItem
+import com.ezyindustries.conews.Retrofit.apiRequest
+import com.ezyindustries.conews.Retrofit.httpClient
+import com.ezyindustries.conews.Service.ArticleService
+import com.ezyindustries.conews.Util.toast
 import kotlinx.android.synthetic.main.fragment_home.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeFragment : Fragment() {
-
-    lateinit var articleList : ArrayList<Article>
-
-    private fun dummyData() {
-        articleList = ArrayList()
-        articleList.add(Article("Apa itu Corona? Kenapa Bahaya?","Covid-19","May 1","Description soon"))
-        articleList.add(Article("Seputar PSBB","Covid-19","May 3","Description soon"))
-        articleList.add(Article("Korban covid-19 masih bertambah","Covid-19","January 2 ","Description soon"))
-
-    }
-
-    private fun showArticle() {
-        rv_listArticleHorizontal.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        rv_listArticleHorizontal.adapter = ArticleAdapter(activity!!,articleList, "horizontal")
-
-        rv_listArticle.layoutManager = LinearLayoutManager(activity)
-        rv_listArticle.adapter = ArticleAdapter(activity!!,articleList,"vertical")
-    }
-
-    private fun initView() {
-        dummyData()
-        showArticle()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +33,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         ViewProps()
-        initView()
+        apiGetArticle()
     }
 
     private fun ViewProps() {
@@ -60,5 +44,49 @@ class HomeFragment : Fragment() {
 
         head.setImageResource(R.drawable.ic_head)
 
+    }
+
+    private fun apiGetArticle() {
+
+        val httpClient = httpClient()
+        val apiRequest = apiRequest<ArticleService>(httpClient)
+        val call = apiRequest.getArticle()
+        call.enqueue(object : Callback<List<ArticleItem>> {
+            override fun onFailure(call: Call<List<ArticleItem>>, t: Throwable) {
+            }
+
+            override fun onResponse(
+                call: Call<List<ArticleItem>>, response:
+                Response<List<ArticleItem>>
+            ) {
+                when {
+                    response.isSuccessful ->
+                        when {
+                            response.body()?.size != 0 ->
+                                showArticle(response.body()!!)
+                            else -> {
+                                toast(context!!, "Berhasil")
+                            }
+                        }
+                    else -> {
+                        toast(context!!, "Gagal")
+                    }
+                }
+            }
+        })
+    }
+
+    private fun showArticle(article: List<ArticleItem>) {
+        rv_listArticle.layoutManager = LinearLayoutManager(context)
+        rv_listArticle.adapter = ArticleAdapter(context!!,article,"vertical")
+        {
+            val article = it
+        }
+
+        rv_listArticleHorizontal.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rv_listArticleHorizontal.adapter = ArticleAdapter(context!!,article,"horizontal")
+        {
+            val article = it
+        }
     }
 }

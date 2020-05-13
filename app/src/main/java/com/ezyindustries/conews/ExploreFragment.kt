@@ -9,43 +9,67 @@ import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ezyindustries.conews.Adapter.ArticleAdapter
-import com.ezyindustries.conews.Data.Article
+import com.ezyindustries.conews.Data.ArticleItem
+import com.ezyindustries.conews.Retrofit.apiRequest
+import com.ezyindustries.conews.Retrofit.httpClient
+import com.ezyindustries.conews.Service.ArticleService
+import com.ezyindustries.conews.Util.toast
 import kotlinx.android.synthetic.main.fragment_explore.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ExploreFragment : Fragment() {
-
-    lateinit var articleList : ArrayList<Article>
-
-    private fun dummyData() {
-        articleList = ArrayList()
-        articleList.add(Article("Apa itu Corona? Kenapa Bahaya?","Covid-19","May 1","Description soon"))
-        articleList.add(Article("Seputar PSBB","Covid-19","May 3","Description soon"))
-        articleList.add(Article("Korban covid-19 masih bertambah","Covid-19","January 2 ","Description soon"))
-
-    }
-
-    private fun showArticle() {
-        rv_listArticle.layoutManager = LinearLayoutManager(activity)
-        rv_listArticle.adapter = ArticleAdapter(activity!!,articleList,"search_result")
-    }
-
-    private fun initView() {
-        dummyData()
-        showArticle()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         return inflater.inflate(R.layout.fragment_explore, container, false)
     }
 
-    override fun onViewCreated( view: View, @Nullable savedInstanceState: Bundle? ) {
+    override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        apiGetArticle()
+    }
 
-        initView()
+    private fun apiGetArticle() {
+
+        val httpClient = httpClient()
+        val apiRequest = apiRequest<ArticleService>(httpClient)
+        val call = apiRequest.getArticle()
+        call.enqueue(object : Callback<List<ArticleItem>> {
+            override fun onFailure(call: Call<List<ArticleItem>>, t: Throwable) {
+            }
+
+            override fun onResponse(
+                call: Call<List<ArticleItem>>, response:
+                Response<List<ArticleItem>>
+            ) {
+                when {
+                    response.isSuccessful ->
+                        when {
+                            response.body()?.size != 0 ->
+                                showArticle(response.body()!!)
+                            else -> {
+                                toast(context!!, "Berhasil")
+                            }
+                        }
+                    else -> {
+                        toast(context!!, "Gagal")
+                    }
+                }
+            }
+        })
+    }
+
+    private fun showArticle(article: List<ArticleItem>) {
+        rv_listArticle.layoutManager = LinearLayoutManager(context)
+        rv_listArticle.adapter = ArticleAdapter(context!!,article,"result")
+        {
+            val article = it
+        }
     }
 }

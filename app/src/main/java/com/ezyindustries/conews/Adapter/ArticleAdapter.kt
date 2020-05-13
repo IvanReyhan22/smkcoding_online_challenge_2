@@ -5,44 +5,36 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ezyindustries.conews.Data.Article
-import com.ezyindustries.conews.R
+import com.bumptech.glide.Glide
+import com.ezyindustries.conews.Data.ArticleItem
 import kotlinx.android.extensions.LayoutContainer
+import com.ezyindustries.conews.R
 import kotlinx.android.synthetic.main.article_item_horizontal.*
 
 
-class ArticleAdapter(private val context: Context, private val items: ArrayList<Article>, private val type: String) :
+class ArticleAdapter( private val context: Context, private val items:
+
+    List<ArticleItem>, private val type: String, private val listener: (ArticleItem) -> Unit
+) :
+
     RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
-
-    class ViewHolder(override val containerView: View) :
-        RecyclerView.ViewHolder(containerView), LayoutContainer {
-
-        fun bindItem(item: Article) {
-            article_pic.setImageResource(R.drawable.ic_head)
-            txtTitle.text = item.title
-            txtDate.text = item.date
-        }
-
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         if (type.equals("horizontal")) {
-            LayoutInflater.from(context).inflate(R.layout.article_item_horizontal, parent, false)
+            return ViewHolder(context,LayoutInflater.from(context).inflate(R.layout.article_item_horizontal,parent,false))
         } else if (type.equals("vertical")) {
-            LayoutInflater.from(context).inflate(R.layout.article_item, parent, false)
+            return ViewHolder(context,LayoutInflater.from(context).inflate(R.layout.article_item,parent,false))
         } else {
-            LayoutInflater.from(context).inflate(R.layout.article_item_search_result, parent, false)
+            return return ViewHolder(context,LayoutInflater.from(context).inflate(R.layout.article_item_search_result,parent,false))
         }
-
-    )
+    }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
-    override fun onBindViewHolder(holder: ArticleAdapter.ViewHolder, position: Int) {
-        holder.bindItem(items.get(position))
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bindItem(items.get(position), listener)
     }
 
     fun <T : RecyclerView.ViewHolder> T.listen(
@@ -54,4 +46,28 @@ class ArticleAdapter(private val context: Context, private val items: ArrayList<
         return this
     }
 
+    class ViewHolder(val context: Context, override val containerView: View) :
+        RecyclerView.ViewHolder(containerView), LayoutContainer{
+
+        fun bindItem(item: ArticleItem, listener: (ArticleItem) -> Unit) {
+            txtTitle.text = item.title
+            txtDate.text = item.date
+
+            Glide.with(context)
+                .load(context.getString(R.string.base_storage_url) + item.image)
+                .into(article_pic)
+
+            containerView.setOnClickListener { listener(item) }
+        }
+
+    }
+
 }
+
+//        if (type.equals("horizontal")) {
+//            LayoutInflater.from(context).inflate(R.layout.article_item_horizontal, parent, false)
+//        } else if (type.equals("vertical")) {
+//            LayoutInflater.from(context).inflate(R.layout.article_item, parent, false)
+//        } else {
+//            LayoutInflater.from(context).inflate(R.layout.article_item_search_result, parent, false)
+//        }

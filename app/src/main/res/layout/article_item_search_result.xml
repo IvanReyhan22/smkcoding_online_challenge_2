@@ -41,7 +41,7 @@
                 android:layout_marginTop="@dimen/def_margin_half"
                 android:layout_marginBottom="@dimen/def_margin"
                 android:layout_marginRight="30dp"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="16dp"
                 android:textStyle="normal"
                 android:textColor="@color/DarkGray"
                 android:text="Dampak covid-19, ekonomi krisi "
