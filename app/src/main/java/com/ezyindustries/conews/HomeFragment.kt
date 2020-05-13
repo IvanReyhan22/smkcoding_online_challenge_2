@@ -52,6 +52,7 @@ class HomeFragment : Fragment() {
         val apiRequest = apiRequest<ArticleService>(httpClient)
         val call = apiRequest.getArticle()
         call.enqueue(object : Callback<List<ArticleItem>> {
+
             override fun onFailure(call: Call<List<ArticleItem>>, t: Throwable) {
             }
 

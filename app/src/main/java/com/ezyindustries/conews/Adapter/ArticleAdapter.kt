@@ -12,7 +12,7 @@ import com.ezyindustries.conews.R
 import kotlinx.android.synthetic.main.article_item_horizontal.*
 
 
-class ArticleAdapter( private val context: Context, private val items:
+class ArticleAdapter(private val context: Context, private val items:
 
     List<ArticleItem>, private val type: String, private val listener: (ArticleItem) -> Unit
 ) :
