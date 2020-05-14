@@ -58,7 +58,7 @@ class ExploreFragment : Fragment() {
                             }
                         }
                     else -> {
-                        toast(context!!, "Gagal")
+                        toast(context!!, "SERVER CLOSED")
                     }
                 }
             }

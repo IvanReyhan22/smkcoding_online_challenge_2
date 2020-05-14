@@ -13,6 +13,11 @@ data class UserData(
     @SerializedName("password")
     val password: String,
     @SerializedName("phone")
-    val phone: String
+    val phone: String,
 
-)
+    @SerializedName("status")
+    val status: String,
+    @SerializedName("values")
+    val values: String
+
+    )

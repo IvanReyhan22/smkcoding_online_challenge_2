@@ -70,7 +70,7 @@ class HomeFragment : Fragment() {
                             }
                         }
                     else -> {
-                        toast(context!!, "Gagal")
+                        toast(context!!, "SERVER CLOSED")
                     }
                 }
             }

@@ -50,7 +50,7 @@ class Register : AppCompatActivity() {
     }
 
     private fun registerHandler() {
-        val intent = Intent(this, Login::class.java)
+        val intent = Intent(this, MainActivity::class.java)
 
         val httpClient = httpClient()
         val apiRequest = apiRequest<AuthService>(httpClient)
@@ -63,19 +63,33 @@ class Register : AppCompatActivity() {
         )
 
         register.enqueue(object : Callback<UserData> {
+
             override fun onFailure(call: Call<UserData>, t: Throwable) {
-                toast(applicationContext,"FAILED" + t.message)
+                toast(applicationContext, "FAILED SEVER CLOSED" + t.message)
             }
 
             override fun onResponse(call: Call<UserData>, response: Response<UserData>) {
 
                 if (response.body()!!.userId > 0) {
 
+//                    val data = mData(applicationContext)
+//
+//                    data.setString("USER_ID",response.body()!!.userId.toString())
+//                    data.setString("USERNAME",response.body()!!.username)
+//                    data.setString("USER_EMAIL",response.body()!!.email)
+//                    data.setString("USER_PHONE",response.body()!!.password)
+
                     startActivity(intent)
                     finish()
 
+                } else if (response.body()!!.status.equals("false")) {
+
+                    toast(applicationContext, response.body()!!.values)
+
                 } else {
-                    toast(applicationContext,"Username atau password salah")
+
+                    toast(applicationContext, "No Internet or Server Down")
+
                 }
 
             }

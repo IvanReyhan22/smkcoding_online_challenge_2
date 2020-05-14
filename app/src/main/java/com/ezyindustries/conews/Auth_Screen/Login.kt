@@ -23,7 +23,20 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        isLoggedIn()
         onClick()
+
+    }
+
+    private fun isLoggedIn(){
+        val sharedPreferences = mData(applicationContext)
+
+        val user_id = sharedPreferences.getString("USER_ID")
+
+        if (user_id != "") {
+            startActivity(Intent(this,MainActivity::class.java))
+            finish()
+        }
     }
 
     private fun onClick() {
@@ -39,7 +52,7 @@ class Login : AppCompatActivity() {
 
                 else -> loginHandler()
             }
-            startActivity(Intent(this, MainActivity::class.java))
+//            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 
@@ -57,25 +70,31 @@ class Login : AppCompatActivity() {
 
         login.enqueue(object : Callback<UserData> {
             override fun onFailure(call: Call<UserData>, t: Throwable) {
-                toast(applicationContext,"FAILED" + t.message)
+                toast(applicationContext,"FAILED SERVER CLOSED" + t.message)
             }
 
             override fun onResponse(call: Call<UserData>, response: Response<UserData>) {
 
                 if (response.body()!!.userId > 0) {
 
-                    val data = mData(applicationContext)
-
-                    data.setString("USER_ID",response.body()!!.userId.toString())
-                    data.setString("USERNAME",response.body()!!.username)
-                    data.setString("USER_EMAIL",response.body()!!.email)
-                    data.setString("USER_PHONE",response.body()!!.password)
+//                    val data = mData(applicationContext)
+//
+//                    data.setString("USER_ID",response.body()!!.userId.toString())
+//                    data.setString("USERNAME",response.body()!!.username)
+//                    data.setString("USER_EMAIL",response.body()!!.email)
+//                    data.setString("USER_PHONE",response.body()!!.password)
 
                     startActivity(intent)
                     finish()
 
+                } else if(response.body()!!.status.equals("false")){
+
+                    toast(applicationContext,response.body()!!.values)
+
                 } else {
-                    toast(applicationContext,"Username atau password salah")
+
+                    toast(applicationContext,"No Internet or Server Down")
+
                 }
 
             }
