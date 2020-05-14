@@ -1,5 +1,6 @@
 package com.ezyindustries.conews
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -78,16 +79,36 @@ class HomeFragment : Fragment() {
     }
 
     private fun showArticle(article: List<ArticleItem>) {
+        val intent = Intent(context,ArticleDetail::class.java)
+
         rv_listArticle.layoutManager = LinearLayoutManager(context)
         rv_listArticle.adapter = ArticleAdapter(context!!,article,"vertical")
         {
             val article = it
+
+            val bundle =  Bundle()
+
+            bundle.putString("ARTICLE_ID",article.articleId.toString())
+
+            intent.putExtras(bundle)
+
+            startActivity(intent)
+            activity!!.finish()
         }
 
         rv_listArticleHorizontal.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         rv_listArticleHorizontal.adapter = ArticleAdapter(context!!,article,"horizontal")
         {
             val article = it
+
+            val bundle =  Bundle()
+
+            bundle.putString("ARTICLE_ID",article.articleId.toString())
+
+            intent.putExtras(bundle)
+
+            startActivity(intent)
+            activity!!.finish()
         }
     }
 }

@@ -72,12 +72,12 @@ class Register : AppCompatActivity() {
 
                 if (response.body()!!.userId > 0) {
 
-//                    val data = mData(applicationContext)
-//
-//                    data.setString("USER_ID",response.body()!!.userId.toString())
-//                    data.setString("USERNAME",response.body()!!.username)
-//                    data.setString("USER_EMAIL",response.body()!!.email)
-//                    data.setString("USER_PHONE",response.body()!!.password)
+                    val data = mData(applicationContext)
+
+                    data.setString("USER_ID",response.body()!!.userId.toString())
+                    data.setString("USERNAME",response.body()!!.username)
+                    data.setString("USER_EMAIL",response.body()!!.email)
+                    data.setString("USER_PHONE",response.body()!!.password)
 
                     startActivity(intent)
                     finish()

@@ -23,4 +23,10 @@ interface AuthService{
         @Field("username")username:String,
         @Field("phone")phone:String
     ):Call<UserData>
+
+    @FormUrlEncoded
+    @POST("userById")
+    fun getUserById(
+        @Field("user_id")user_id:String
+    ):Call<UserData>
 }

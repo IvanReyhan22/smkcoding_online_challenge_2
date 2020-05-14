@@ -14,6 +14,8 @@ data class UserData(
     val password: String,
     @SerializedName("phone")
     val phone: String,
+    @SerializedName("caption")
+    val caption: String,
 
     @SerializedName("status")
     val status: String,

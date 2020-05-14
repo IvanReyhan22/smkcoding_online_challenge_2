@@ -1,6 +1,7 @@
 package com.ezyindustries.conews
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -70,6 +71,18 @@ class ExploreFragment : Fragment() {
         rv_listArticle.adapter = ArticleAdapter(context!!,article,"result")
         {
             val article = it
+
+            val intent = Intent(context,ArticleDetail::class.java)
+
+            val bundle =  Bundle()
+
+            bundle.putString("ARTICLE_ID",article.articleId.toString())
+
+            intent.putExtras(bundle)
+
+            startActivity(intent)
+
+            activity!!.finish()
         }
     }
 }

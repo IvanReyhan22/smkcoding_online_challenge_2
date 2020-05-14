@@ -1,6 +1,5 @@
 package com.ezyindustries.conews.Auth_Screen
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -77,12 +76,12 @@ class Login : AppCompatActivity() {
 
                 if (response.body()!!.userId > 0) {
 
-//                    val data = mData(applicationContext)
-//
-//                    data.setString("USER_ID",response.body()!!.userId.toString())
-//                    data.setString("USERNAME",response.body()!!.username)
-//                    data.setString("USER_EMAIL",response.body()!!.email)
-//                    data.setString("USER_PHONE",response.body()!!.password)
+                    val data = mData(applicationContext)
+
+                    data.setString("USER_ID",response.body()!!.userId.toString())
+                    data.setString("USERNAME",response.body()!!.username)
+                    data.setString("USER_EMAIL",response.body()!!.email)
+                    data.setString("USER_PHONE",response.body()!!.password)
 
                     startActivity(intent)
                     finish()
