@@ -17,10 +17,6 @@ import retrofit2.Response
 class ProfileEdit : AppCompatActivity() {
 
     private var user_id = ""
-    private var username = ""
-    private var email = ""
-    private var phone = ""
-    private var caption = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +37,7 @@ class ProfileEdit : AppCompatActivity() {
         }
 
         submit_btn.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
+            updateUser()
         }
     }
 
@@ -68,7 +63,7 @@ class ProfileEdit : AppCompatActivity() {
 
                 if (response.body()!!.status.equals("true")) {
 
-                    toast(applicationContext,"Update success")
+                    toast(applicationContext, "Update success")
 
                 } else {
 
@@ -102,17 +97,12 @@ class ProfileEdit : AppCompatActivity() {
 
                     val item = response.body()!!
 
-                    username = item.username
-                    email = item.username
-                    phone = item.phone
-                    caption = item.caption
+                    inpt_name.setText(item.username)
+                    inpt_email.setText(item.email)
+                    inpt_phone.setText(item.phone)
 
-                    inpt_name.hint = item.username
-                    inpt_email.hint = item.email
-                    inpt_phone.hint = item.phone
-
-                    if (item.caption != null) {
-                        inpt_caption.hint = applicationContext.getString(R.string.caption_default)
+                    if (item.caption != "null") {
+                        inpt_caption.setText(applicationContext.getString(R.string.caption_default))
                     }
 
 

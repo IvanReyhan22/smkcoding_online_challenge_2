@@ -103,7 +103,7 @@
                             android:layout_height="wrap_content"/>
 
                     <TextView
-                            android:text="Caption"
+                            android:text="Phone"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="@color/DarkGray"
