@@ -55,6 +55,11 @@ class ProfileFragment : Fragment() {
             startActivity(Intent(context,Login::class.java))
             activity!!.finish()
         }
+
+        edit.setOnClickListener {
+
+            startActivity(Intent(context,ProfileEdit::class.java))
+        }
     }
 
     private fun getProfileData() {
