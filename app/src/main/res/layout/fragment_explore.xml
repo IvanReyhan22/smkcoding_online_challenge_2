@@ -36,6 +36,7 @@
             <EditText
                     android:id="@+id/inpt_search_article"
                     android:layout_weight="10"
+                    android:singleLine="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="Cari judul artikel"

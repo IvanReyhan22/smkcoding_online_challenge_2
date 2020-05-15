@@ -17,4 +17,10 @@ interface ArticleService {
     fun getArticleById(
         @Field("article_id") user_id: String
     ): Call<ArticleItem>
+
+    @FormUrlEncoded
+    @POST("article/search")
+    fun searchArticleBy(
+        @Field("search") search: String
+    ): Call<List<ArticleItem>>
 }

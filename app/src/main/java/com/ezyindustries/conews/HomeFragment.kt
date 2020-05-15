@@ -40,7 +40,7 @@ class HomeFragment : Fragment() {
     private fun ViewProps() {
 
         val headParam = head.layoutParams as ViewGroup.MarginLayoutParams
-        headParam.setMargins(0,110,0,110)
+        headParam.setMargins(0,60,0,110)
         head.layoutParams = headParam
 
         head.setImageResource(R.drawable.ic_head)
@@ -93,7 +93,6 @@ class HomeFragment : Fragment() {
             intent.putExtras(bundle)
 
             startActivity(intent)
-            activity!!.finish()
         }
 
         rv_listArticleHorizontal.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -108,7 +107,6 @@ class HomeFragment : Fragment() {
             intent.putExtras(bundle)
 
             startActivity(intent)
-            activity!!.finish()
         }
     }
 }
