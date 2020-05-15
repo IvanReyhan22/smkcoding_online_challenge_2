@@ -16,16 +16,113 @@ import retrofit2.Response
 
 class ProfileEdit : AppCompatActivity() {
 
+    private var user_id = ""
+    private var username = ""
+    private var email = ""
+    private var phone = ""
+    private var caption = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_edit)
 
+        val sharedPreferences = mData(applicationContext)
+
+        user_id = sharedPreferences.getString("USER_ID")
+
+        getProfileData()
         onClick()
     }
 
     private fun onClick() {
         back_btn.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+
+        submit_btn.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
     }
+
+    private fun updateUser() {
+
+        val httpClient = httpClient()
+        val apiRequest = apiRequest<AuthService>(httpClient)
+
+        val update = apiRequest.updateUser(
+            user_id,
+            inpt_email.text.toString(),
+            inpt_name.text.toString(),
+            inpt_phone.text.toString(),
+            inpt_caption.text.toString()
+        )
+
+        update.enqueue(object : Callback<UserData> {
+            override fun onFailure(call: Call<UserData>, t: Throwable) {
+                toast(applicationContext, "SERVER CLOSED " + t.message)
+            }
+
+            override fun onResponse(call: Call<UserData>, response: Response<UserData>) {
+
+                if (response.body()!!.status.equals("true")) {
+
+                    toast(applicationContext,"Update success")
+
+                } else {
+
+                    toast(applicationContext, "Failed update, Try again")
+
+                }
+
+            }
+
+        })
+
+    }
+
+    private fun getProfileData() {
+
+        val httpClient = httpClient()
+        val apiRequest = apiRequest<AuthService>(httpClient)
+
+        val getProfile = apiRequest.getUserById(
+            user_id
+        )
+
+        getProfile.enqueue(object : Callback<UserData> {
+            override fun onFailure(call: Call<UserData>, t: Throwable) {
+                toast(applicationContext, "FAILED SERVER CLOSED" + t.message)
+            }
+
+            override fun onResponse(call: Call<UserData>, response: Response<UserData>) {
+
+                if (response.body()!!.userId > 0) {
+
+                    val item = response.body()!!
+
+                    username = item.username
+                    email = item.username
+                    phone = item.phone
+                    caption = item.caption
+
+                    inpt_name.hint = item.username
+                    inpt_email.hint = item.email
+                    inpt_phone.hint = item.phone
+
+                    if (item.caption != null) {
+                        inpt_caption.hint = applicationContext.getString(R.string.caption_default)
+                    }
+
+
+                } else {
+                    toast(applicationContext, "PLEASE RESTART")
+                }
+            }
+
+        })
+
+    }
+
 }

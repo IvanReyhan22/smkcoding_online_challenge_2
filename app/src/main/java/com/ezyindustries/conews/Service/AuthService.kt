@@ -29,4 +29,14 @@ interface AuthService{
     fun getUserById(
         @Field("user_id")user_id:String
     ):Call<UserData>
+
+    @FormUrlEncoded
+    @POST("user/update")
+    fun updateUser(
+        @Field("user_id")user_id:String,
+        @Field("email")email:String,
+        @Field("username")username:String,
+        @Field("phone")phone:String,
+        @Field("caption")caption:String
+    ):Call<UserData>
 }

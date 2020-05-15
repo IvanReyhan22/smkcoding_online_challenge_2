@@ -15,7 +15,7 @@
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:src="@drawable/ic_head"/>
+                android:src="@drawable/other"/>
 
 
         <TextView
@@ -58,6 +58,30 @@
                 android:layout_width="250dp"
                 android:layout_height="1dp"
                 android:background="@color/Gray"/>
+
+        <LinearLayout
+                android:id="@+id/edit"
+                android:layout_margin="20dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <ImageView
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_edit"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"/>
+
+            <TextView
+                    android:text="Edit Profile"
+                    android:layout_marginLeft="@dimen/def_margin"
+                    android:textSize="18dp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/Black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
         <LinearLayout
                 android:id="@+id/logout"

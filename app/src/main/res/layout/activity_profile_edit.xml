@@ -105,6 +105,26 @@
                     <TextView
                             android:text="Caption"
                             android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/DarkGray"
+                            android:layout_marginBottom="@dimen/def_margin_half"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    <EditText
+                            android:id="@+id/inpt_phone"
+                            android:hint="081234567890"
+                            android:textSize="18dp"
+                            android:padding="@dimen/def_margin_half"
+                            android:textColor="@color/Black"
+                            android:layout_marginBottom="24dp"
+                            android:background="@drawable/rounded_seconday_background"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    <TextView
+                            android:text="Caption"
+                            android:textSize="14sp"
                             android:textColor="@color/DarkGray"
                             android:layout_marginBottom="@dimen/def_margin_half"
                             android:layout_width="match_parent"
