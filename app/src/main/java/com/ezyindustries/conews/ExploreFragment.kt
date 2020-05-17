@@ -108,9 +108,6 @@ class ExploreFragment : Fragment() {
                         when {
                             response.body()?.size != 0 ->
                                 showArticle(response.body()!!)
-                            else -> {
-                                toast(context!!, "Berhasil")
-                            }
                         }
                     else -> {
                         toast(context!!, "SERVER CLOSED")

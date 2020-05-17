@@ -3,6 +3,7 @@ package com.ezyindustries.conews.Auth_Screen
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import com.ezyindustries.conews.Adapter.mData
 import com.ezyindustries.conews.Data.UserData
 import com.ezyindustries.conews.MainActivity
@@ -17,6 +18,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class Login : AppCompatActivity() {
+
+    private val emailPattern =  "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,10 +51,11 @@ class Login : AppCompatActivity() {
             when {
                 inpt_email.text.isEmpty() -> inpt_email.error = "Require"
                 inpt_password.text.isEmpty() -> inpt_password.error = "Require"
+                !inpt_email.text.toString().trim().matches(emailPattern.toRegex()) ->  inpt_email.error = "Not Valid Email"
 
                 else -> loginHandler()
             }
-//            startActivity(Intent(this, MainActivity::class.java))
+
         }
     }
 
@@ -101,4 +105,5 @@ class Login : AppCompatActivity() {
         })
 
     }
+
 }

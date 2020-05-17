@@ -18,6 +18,8 @@ import retrofit2.Response
 
 class Register : AppCompatActivity() {
 
+    private val emailPattern =  "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -40,9 +42,11 @@ class Register : AppCompatActivity() {
             when {
 
                 inpt_username.text.isEmpty() -> inpt_username.error = "Require"
-                inpt_email.text.isEmpty() -> inpt_email.error = "Require"
                 inpt_password.text.isEmpty() -> inpt_password.error = "Require"
                 inpt_phone.text.isEmpty() -> inpt_phone.error = "Require"
+
+                inpt_email.text.isEmpty() -> inpt_email.error = "Require"
+                !inpt_email.text.toString().trim().matches(emailPattern.toRegex()) -> inpt_email.error = "Not Valid Email"
 
                 else -> registerHandler()
             }
@@ -74,10 +78,10 @@ class Register : AppCompatActivity() {
 
                     val data = mData(applicationContext)
 
-                    data.setString("USER_ID",response.body()!!.userId.toString())
-                    data.setString("USERNAME",response.body()!!.username)
-                    data.setString("USER_EMAIL",response.body()!!.email)
-                    data.setString("USER_PHONE",response.body()!!.password)
+                    data.setString("USER_ID", response.body()!!.userId.toString())
+                    data.setString("USERNAME", response.body()!!.username)
+                    data.setString("USER_EMAIL", response.body()!!.email)
+                    data.setString("USER_PHONE", response.body()!!.password)
 
                     startActivity(intent)
                     finish()

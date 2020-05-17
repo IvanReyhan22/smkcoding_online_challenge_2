@@ -25,33 +25,34 @@ class HomeFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    override fun onViewCreated( view: View, @Nullable savedInstanceState: Bundle? ) {
+    override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         ViewProps()
-        apiGetArticle()
+        apiGetHotArticle()
+        apiGetDailyArtice()
     }
 
     private fun ViewProps() {
 
         val headParam = head.layoutParams as ViewGroup.MarginLayoutParams
-        headParam.setMargins(0,60,0,110)
+        headParam.setMargins(0, 60, 0, 110)
         head.layoutParams = headParam
 
         head.setImageResource(R.drawable.ic_head)
 
     }
 
-    private fun apiGetArticle() {
+    private fun apiGetHotArticle() {
 
         val httpClient = httpClient()
         val apiRequest = apiRequest<ArticleService>(httpClient)
-        val call = apiRequest.getArticle()
+        val call = apiRequest.getHotArticle()
         call.enqueue(object : Callback<List<ArticleItem>> {
 
             override fun onFailure(call: Call<List<ArticleItem>>, t: Throwable) {
@@ -65,7 +66,7 @@ class HomeFragment : Fragment() {
                     response.isSuccessful ->
                         when {
                             response.body()?.size != 0 ->
-                                showArticle(response.body()!!)
+                                showHotArticle(response.body()!!)
                             else -> {
                                 toast(context!!, "Berhasil")
                             }
@@ -78,31 +79,66 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun showArticle(article: List<ArticleItem>) {
-        val intent = Intent(context,ArticleDetail::class.java)
+    private fun apiGetDailyArtice() {
 
-        rv_listArticle.layoutManager = LinearLayoutManager(context)
-        rv_listArticle.adapter = ArticleAdapter(context!!,article,"vertical")
+        val httpClient = httpClient()
+        val apiRequest = apiRequest<ArticleService>(httpClient)
+        val call = apiRequest.getDailyArticle()
+        call.enqueue(object : Callback<List<ArticleItem>> {
+
+            override fun onFailure(call: Call<List<ArticleItem>>, t: Throwable) {
+            }
+
+            override fun onResponse(
+                call: Call<List<ArticleItem>>, response:
+                Response<List<ArticleItem>>
+            ) {
+                when {
+                    response.isSuccessful ->
+                        when {
+                            response.body()?.size != 0 ->
+                                showDailyArticle(response.body()!!)
+                            else -> {
+                                toast(context!!, "Berhasil")
+                            }
+                        }
+                    else -> {
+                        toast(context!!, "SERVER CLOSED")
+                    }
+                }
+            }
+        })
+    }
+
+    private fun showHotArticle(article: List<ArticleItem>) {
+        val intent = Intent(context, ArticleDetail::class.java)
+
+        rv_listArticleHorizontal.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rv_listArticleHorizontal.adapter = ArticleAdapter(context!!, article, "horizontal")
         {
             val article = it
 
-            val bundle =  Bundle()
+            val bundle = Bundle()
 
-            bundle.putString("ARTICLE_ID",article.articleId.toString())
+            bundle.putString("ARTICLE_ID", article.articleId.toString())
 
             intent.putExtras(bundle)
 
             startActivity(intent)
         }
+    }
 
-        rv_listArticleHorizontal.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        rv_listArticleHorizontal.adapter = ArticleAdapter(context!!,article,"horizontal")
+    private fun showDailyArticle(article: List<ArticleItem>) {
+        val intent = Intent(context, ArticleDetail::class.java)
+
+        rv_listArticle.layoutManager = LinearLayoutManager(context)
+        rv_listArticle.adapter = ArticleAdapter(context!!, article, "vertical")
         {
             val article = it
 
-            val bundle =  Bundle()
+            val bundle = Bundle()
 
-            bundle.putString("ARTICLE_ID",article.articleId.toString())
+            bundle.putString("ARTICLE_ID", article.articleId.toString())
 
             intent.putExtras(bundle)
 

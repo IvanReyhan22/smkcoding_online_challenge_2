@@ -12,6 +12,12 @@ interface ArticleService {
     @GET("article")
     fun getArticle(): Call<List<ArticleItem>>
 
+    @GET("article/hot")
+    fun getHotArticle(): Call<List<ArticleItem>>
+
+    @GET("article/daily")
+    fun getDailyArticle(): Call<List<ArticleItem>>
+
     @FormUrlEncoded
     @POST("articleById")
     fun getArticleById(
