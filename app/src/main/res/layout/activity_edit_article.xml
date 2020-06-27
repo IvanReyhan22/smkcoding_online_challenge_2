@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:card_view="http://schemas.android.com/tools"
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="11"
+                android:orientation="vertical">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/def_margin_half"
+                        android:text="Edit berita"
+                        android:textColor="@color/Black"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                <Button
+                        android:id="@+id/delete_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@drawable/rounded_red_btn"
+                        android:minHeight="30dip"
+                        android:text="Hapus"
+                        android:textColor="@color/White"
+                        android:textStyle="normal" />
+
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp"
+                    card_view:cardElevation="0dp">
+
+                <ImageView
+                        android:id="@+id/image_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop" />
+
+                <ImageView
+                        android:id="@+id/image_pick"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="86dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_upload" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/def_margin_half"
+                    android:text="Judul"
+                    android:textColor="@color/DarkGray"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            <EditText
+                    android:id="@+id/inptTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:background="@drawable/rounded_white_background"
+                    android:padding="@dimen/def_margin_half"
+                    android:textColor="@color/Black"
+                    android:textSize="18dp" />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/def_margin_half"
+                    android:text="Konten"
+                    android:textColor="@color/DarkGray"
+                    android:textSize="14sp" />
+
+            <EditText
+                    android:id="@+id/inptContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:background="@drawable/rounded_white_background"
+                    android:gravity="top"
+                    android:inputType="text|textMultiLine"
+                    android:padding="@dimen/def_margin_half"
+                    android:textColor="@color/Black"
+                    android:textSize="18dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="@dimen/def_margin"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+            <Button
+                    android:id="@+id/submit_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/Primary"
+                    android:text="Update"
+                    android:textColor="@color/White"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+            <Button
+                    android:id="@+id/cancel_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:text="cancel"
+                    android:textAllCaps="false" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>

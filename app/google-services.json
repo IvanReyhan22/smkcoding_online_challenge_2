@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "37373210738",
+    "firebase_url": "https://conews-480a8.firebaseio.com",
+    "project_id": "conews-480a8",
+    "storage_bucket": "conews-480a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37373210738:android:93b5d7b1384e3cfb9e12eb",
+        "android_client_info": {
+          "package_name": "com.ezyindustries.conews"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "37373210738-uc5hgda7shi2t81t88ckflthi8bg5pb9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ezyindustries.conews",
+            "certificate_hash": "16814bdc03bf4db29d191a4f8d5de20b3fa8e475"
+          }
+        },
+        {
+          "client_id": "37373210738-i5s5fmvi91osu9697m2dsllt2pg4etib.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUxBDJPBh3w9LfhlTAk3HFBOHWf3mGYb0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "37373210738-i5s5fmvi91osu9697m2dsllt2pg4etib.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

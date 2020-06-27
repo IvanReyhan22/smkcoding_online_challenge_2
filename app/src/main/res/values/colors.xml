@@ -4,6 +4,7 @@
     <color name="Background">#F5F5F5</color>
     <color name="Black">#131313</color>
     <color name="Primary">#2A5FFD</color>
+    <color name="Red">#d35400</color>
     <color name="LightPrimary">#86A3FB</color>
     <color name="DarkGray">#535c68</color>
     <color name="Gray">#BFC4E9</color>

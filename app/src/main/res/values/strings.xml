@@ -2,6 +2,7 @@
     <string name="app_name">co.news</string>
     <string name="base_api_url">https://conews.herokuapp.com/</string>
     <string name="base_storage_url">https://conews.herokuapp.com/storage/</string>
+    <string name="web_id_client">RaBzDaUVr5nGv_7Qn2JxjftEQ</string>
     <string name="short_text">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
     </string>

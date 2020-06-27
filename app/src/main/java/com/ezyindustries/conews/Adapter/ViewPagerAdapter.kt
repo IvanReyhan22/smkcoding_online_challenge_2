@@ -8,16 +8,18 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.ezyindustries.conews.ExploreFragment
 import com.ezyindustries.conews.HomeFragment
 import com.ezyindustries.conews.ProfileFragment
+import com.ezyindustries.conews.WriteArticleFragment
 
 class ViewPagerAdapter (fragmentActivity: FragmentActivity): FragmentStateAdapter(fragmentActivity) {
 
-    private val MENU_COUNT = 3
+    private val MENU_COUNT = 4
 
     override fun createFragment(position: Int): Fragment {
         when (position) {
             0 -> { return HomeFragment() }
             1 -> { return ExploreFragment() }
-            2 -> { return ProfileFragment() }
+            2 -> { return WriteArticleFragment() }
+            3 -> { return ProfileFragment() }
             else -> {
                 return HomeFragment()
             }

@@ -1,14 +1,18 @@
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
-
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
     defaultConfig {
         applicationId "com.ezyindustries.conews"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -33,8 +37,27 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
+    // Room
+    implementation 'androidx.room:room-runtime:2.2.5'
+    kapt 'androidx.room:room-compiler:2.2.5'
+    implementation 'androidx.room:room-ktx:2.2.5'
+
+    //ktx
+    implementation 'androidx.fragment:fragment-ktx:1.2.4'
+
+    // GOOGLE PLAY
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
+
     //GSON
     implementation 'com.google.code.gson:gson:2.8.2'
+
+    // FIREBASE
+    implementation 'com.google.firebase:firebase-core:17.4.3'
+    implementation 'com.google.firebase:firebase-auth:19.3.1'
+    implementation 'com.google.firebase:firebase-database:19.3.1'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
+
 
     //NETWORK
     implementation 'com.squareup.okhttp3:okhttp:3.13.1'
@@ -46,6 +69,7 @@ dependencies {
 
     //GLIDE
     implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.google.firebase:firebase-database:16.0.4'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
     //cardview
@@ -62,6 +86,8 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
+
+apply plugin: 'com.google.gms.google-services'
 
 androidExtensions {
     experimental = true
