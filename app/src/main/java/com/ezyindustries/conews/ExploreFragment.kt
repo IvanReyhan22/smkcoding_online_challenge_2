@@ -97,8 +97,7 @@ class ExploreFragment : Fragment() {
                 if (internet!!) {
                     apiGetArticle()
                 } else {
-                    toast(context!!, "Tidak ada akses internet")
-
+//                    toast(context!!, "Tidak ada akses internet")
                     //Model CALL DATA FROM LOCAL DATABASE
                     viewModel.allArticle?.observe(viewLifecycleOwner, Observer { article ->
                         article.let {

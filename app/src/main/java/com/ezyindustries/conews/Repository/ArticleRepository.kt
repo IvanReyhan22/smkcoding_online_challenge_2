@@ -9,6 +9,10 @@ class ArticleRepository(private val articleDao: ArticleDao) {
 
     val hotArticle: LiveData<List<ArticleModel>> = articleDao.getHotArticle("hot")
 
+    suspend fun getUserArticle(article: String){
+        articleDao.getUserArticle(article)
+    }
+
     suspend fun insert(article: ArticleModel){
         articleDao.insert(article)
     }

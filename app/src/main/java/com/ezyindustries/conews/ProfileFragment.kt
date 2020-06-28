@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.ezyindustries.conews.Adapter.ArticleAdapter
@@ -21,11 +22,12 @@ import com.ezyindustries.conews.Data.UserModel
 import com.ezyindustries.conews.Retrofit.apiRequest
 import com.ezyindustries.conews.Retrofit.httpClient
 import com.ezyindustries.conews.Service.AuthService
+import com.ezyindustries.conews.Util.InternetCheck
 import com.ezyindustries.conews.Util.toast
+import com.ezyindustries.conews.ViewModel.ArticleFragmentViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.activity_article_detail.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import retrofit2.Call
@@ -36,8 +38,13 @@ class ProfileFragment : Fragment() {
 
     lateinit var ref: DatabaseReference
     lateinit var auth: FirebaseAuth
-    lateinit var articleData: ArrayList<ArticleModel>
     private lateinit var firebaseAuth: FirebaseAuth
+
+    //    lateinit var articleData: ArrayList<ArticleModel>
+    var articleData: MutableList<ArticleModel> = ArrayList()
+    private val viewModel by viewModels<ArticleFragmentViewModel>()
+    private var adapter: ArticleAdapter? = null
+    private var isInternetOk = false
 
     private var mUserId: String = ""
     private var mName: String = ""
@@ -60,7 +67,14 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        init()
+
         firebaseAuth = FirebaseAuth.getInstance()
+
+        viewModel.init(requireContext())
+
+        //Internet connection access check
+        checkConnection()
 
         getProfileData()
         getArticleData()
@@ -73,37 +87,97 @@ class ProfileFragment : Fragment() {
 
             FirebaseAuth.getInstance().signOut();
 
-//            val data = mData(context!!)
-//
-//            data.removeString("USER_ID")
-//            data.removeString("USERNAME")
-//            data.removeString("USER_EMAIL")
-//            data.removeString("USER_PHONE")
+            val data = mData(requireContext())
+
+            data.removeString("USER_ID")
+            data.removeString("USERNAME")
+            data.removeString("USER_EMAIL")
+            data.removeString("USER_PHOTO")
 
             startActivity(Intent(context, Login::class.java))
-            activity!!.finish()
+            activity?.finish()
         }
 
         edit.setOnClickListener {
-            val intent = Intent(context, ProfileEdit::class.java)
+            if (isInternetOk) {
+                val intent = Intent(context, ProfileEdit::class.java)
+
+                val bundle = Bundle()
+
+                bundle.putString("USERID", mUserId)
+                bundle.putString("NAME", mName)
+                bundle.putString("IMAGE", mImage)
+                bundle.putString("EMAIL", mEmail)
+                bundle.putString("CAPTION", mCaption)
+
+                intent.putExtras(bundle)
+
+                startActivity(intent)
+            } else {
+                toast(requireContext(),"Maaf kak kamu butuh koneksi internet untuk update profil")
+            }
+        }
+    }
+
+    private fun checkConnection() {
+        /**
+         * Basically if there is an internet connection it will use apiGetArticle() method to get data from database
+         * but if there's no internet connection then it will load data from room local database to show data list
+         */
+        InternetCheck(object : InternetCheck.Consumer {
+            override fun accept(internet: Boolean?) {
+                if (internet!!) {
+                    isInternetOk = true
+                    getProfileData()
+                } else {
+                    isInternetOk = false
+                    toast(context!!, "Tidak ada akses internet")
+
+                    // Load data user from local storage
+                    val sharedPreferences = mData(context!!)
+                    val mUsername = sharedPreferences.getString("USERNAME")
+                    val mEmail = sharedPreferences.getString("USER_EMAIL")
+                    val mPhoto = sharedPreferences.getString("USER_PHOTO")
+
+                    name.text = mUsername
+                    email.text = mEmail
+                    Glide.with(context!!)
+                        .load(mPhoto)
+                        .into(user_pic)
+
+                    offline_message.setText("Internet koneksi dibutuhkan untuk update dan delete artikel")
+
+                }
+            }
+        })
+    }
+
+    private fun init() {
+        rv_myArticle.layoutManager = LinearLayoutManager(context)
+        adapter = ArticleAdapter(requireContext(), articleData, "vertical") {
+            val article = it
+
+            val intent = Intent(context, EditArticle::class.java)
 
             val bundle = Bundle()
 
-            bundle.putString("USERID", mUserId)
-            bundle.putString("NAME", mName)
-            bundle.putString("IMAGE", mImage)
-            bundle.putString("EMAIL", mEmail)
-            bundle.putString("CAPTION", mCaption)
+            bundle.putString("ARTICLE_ID", article.articleId)
+            bundle.putString("OWNER_ID", article.ownerId)
+            bundle.putString("TITLE", article.title)
+            bundle.putString("CONTENT", article.content)
+            bundle.putString("IMAGE", article.image)
+            bundle.putString("DATE", article.date)
 
             intent.putExtras(bundle)
 
             startActivity(intent)
         }
+        rv_myArticle.adapter = adapter
     }
 
     private fun getProfileData() {
 
-        val acct = GoogleSignIn.getLastSignedInAccount(context!!)
+        val acct = GoogleSignIn.getLastSignedInAccount(requireContext())
 
         if (acct != null) {
 
@@ -140,12 +214,12 @@ class ProfileFragment : Fragment() {
             })
 
         } else {
-            toast(context!!, "Failed retrieve personal data, Please re-login")
+            toast(requireContext(), "Failed retrieve personal data, Please re-login")
 
             firebaseAuth.signOut()
 
             startActivity(Intent(context, Login::class.java))
-            activity!!.finish()
+            activity?.finish()
         }
 
 //    ==========================================NODEJS API==================================================
@@ -194,6 +268,16 @@ class ProfileFragment : Fragment() {
         val userId: String = auth.currentUser!!.uid
         ref = FirebaseDatabase.getInstance().getReference("Article")
 
+
+
+
+
+
+
+
+
+
+
         ref.orderByChild("ownerId").equalTo(userId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
@@ -205,6 +289,7 @@ class ProfileFragment : Fragment() {
                     for (snap in snapshot.children) {
                         val data = snap.getValue(ArticleModel::class.java)
 
+                        data?.key = snap.key!!
                         articleData.add(data!!)
                     }
 

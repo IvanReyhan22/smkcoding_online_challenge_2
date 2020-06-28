@@ -12,7 +12,10 @@ import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.ezyindustries.conews.Adapter.mData
 import com.ezyindustries.conews.Data.ArticleModel
+import com.ezyindustries.conews.Util.InternetCheck
 import com.ezyindustries.conews.Util.toast
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
@@ -22,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_write_article.*
 import java.io.IOException
 import java.time.LocalDateTime
@@ -37,6 +41,7 @@ class WriteArticleFragment : Fragment() {
     private var firebaseStore: FirebaseStorage? = null
     private var storageReference: StorageReference? = null
     private lateinit var firebaseAuth: FirebaseAuth
+    private var isInternetOk = false
 
     lateinit var ref: DatabaseReference
 
@@ -60,15 +65,35 @@ class WriteArticleFragment : Fragment() {
         ref = FirebaseDatabase.getInstance().getReference("Article")
         storageReference = FirebaseStorage.getInstance().reference
 
+        checkConnection()
+
         setOnClick()
 
+    }
+
+    private fun checkConnection() {
+        /**
+         * Basically if there is an internet connection it will use apiGetArticle() method to get data from database
+         * but if there's no internet connection then it will load data from room local database to show data list
+         */
+        InternetCheck(object : InternetCheck.Consumer {
+            override fun accept(internet: Boolean?) {
+                if (internet!!) {
+                    isInternetOk = true
+                }
+            }
+        })
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setOnClick() {
 
         submit_btn.setOnClickListener {
-            uploadImage()
+            if (isInternetOk){
+                uploadImage()
+            } else {
+                toast(requireContext(), "Maaf kak kamu butuh koneksi internet untuk update profil")
+            }
         }
 
         cancel_btn.setOnClickListener {

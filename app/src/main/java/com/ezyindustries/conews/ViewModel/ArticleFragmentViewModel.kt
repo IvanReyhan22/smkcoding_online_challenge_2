@@ -41,4 +41,8 @@ class ArticleFragmentViewModel() : ViewModel() {
     fun insert(article: ArticleModel) = viewModelScope.launch(Dispatchers.IO) {
         repository?.insert(article)
     }
+
+    fun getUserArticle(userId:String) = viewModelScope.launch(Dispatchers.IO){
+        repository?.getUserArticle(userId)
+    }
 }

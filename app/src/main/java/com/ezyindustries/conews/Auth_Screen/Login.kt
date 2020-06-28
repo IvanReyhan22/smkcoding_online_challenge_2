@@ -197,6 +197,13 @@ class Login : AppCompatActivity() {
                     ""
                 )
 
+                val sharedPreferences = mData(applicationContext)
+
+                sharedPreferences.setString("USER_ID", userId)
+                sharedPreferences.setString("USERNAME", acct?.displayName.toString())
+                sharedPreferences.setString("USER_EMAIL", acct?.email.toString())
+                sharedPreferences.setString("USER_PHOTO", acct?.photoUrl.toString())
+
                 ref.child(userId).setValue(data).addOnCompleteListener {
                     toast(this, "Welcome" + acct?.displayName)
                     val intent = Intent(this, MainActivity::class.java)
