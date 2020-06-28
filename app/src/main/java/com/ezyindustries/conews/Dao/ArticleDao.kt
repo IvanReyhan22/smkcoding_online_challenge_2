@@ -10,6 +10,9 @@ interface ArticleDao {
     @Query("SELECT * from article")
     fun getArticle(): LiveData<List<ArticleModel>>
 
+    @Query("SELECT * from article WHERE category = :category")
+    fun getHotArticle(category : String): LiveData<List<ArticleModel>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(article: ArticleModel)
 

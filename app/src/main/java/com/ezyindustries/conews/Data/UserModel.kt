@@ -1,7 +1,11 @@
 package com.ezyindustries.conews.Data
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "user")
 data class UserModel(
-    var userId: String,
+    @PrimaryKey var userId: String,
     var image:String,
     var name: String,
     var email: String,

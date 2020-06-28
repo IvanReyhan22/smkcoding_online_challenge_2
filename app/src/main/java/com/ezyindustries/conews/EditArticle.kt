@@ -96,7 +96,8 @@ class EditArticle : AppCompatActivity() {
             refContent,
             newImage,
             "daily",
-            bunDate
+            bunDate,
+            ""
         )
 
         ref.child(bunArticleId).setValue(data).addOnCompleteListener {

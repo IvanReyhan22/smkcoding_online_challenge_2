@@ -18,12 +18,18 @@ import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.article_item_horizontal.*
 
 class ArticleAdapter(
-    private val context: Context, private val items:
+    private val context: Context, private var items:
 
     List<ArticleModel>, private val type: String, private val listener: (ArticleModel) -> Unit
 ) :
 
     RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
+
+    fun setData(list: List<ArticleModel>){
+        items = list
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         if (type.equals("horizontal")) {

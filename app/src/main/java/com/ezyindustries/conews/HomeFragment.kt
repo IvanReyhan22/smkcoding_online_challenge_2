@@ -2,11 +2,14 @@ package com.ezyindustries.conews
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ezyindustries.conews.Adapter.ArticleAdapter
 import com.ezyindustries.conews.Data.ArticleItem
@@ -14,11 +17,11 @@ import com.ezyindustries.conews.Data.ArticleModel
 import com.ezyindustries.conews.Retrofit.apiRequest
 import com.ezyindustries.conews.Retrofit.httpClient
 import com.ezyindustries.conews.Service.ArticleService
+import com.ezyindustries.conews.Util.InternetCheck
 import com.ezyindustries.conews.Util.toast
+import com.ezyindustries.conews.ViewModel.ArticleFragmentViewModel
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.fragment_explore.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_home.rv_listArticle
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,7 +30,10 @@ import java.util.ArrayList
 class HomeFragment : Fragment() {
 
     lateinit var ref: DatabaseReference
-    lateinit var articleData: ArrayList<ArticleModel>
+//    lateinit var articleData: ArrayList<ArticleModel>
+    var articleData: MutableList<ArticleModel> = ArrayList()
+    private val viewModel by viewModels<ArticleFragmentViewModel>()
+    private var adapter: ArticleAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,9 +51,67 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        init()
+
+        viewModel.init(requireContext())
+
+        //Internet connection access check
+        checkConnection()
+
+        //Xml config
         ViewProps()
-        apiGetHotArticle()
-        apiGetDailyArtice()
+    }
+
+    private fun init() {
+        rv_listArticleHorizontal.layoutManager = LinearLayoutManager(context)
+        adapter = ArticleAdapter(requireContext(), articleData, "horizontal") {
+            val article = it
+
+            val intent = Intent(context, ArticleDetail::class.java)
+
+            val bundle = Bundle()
+
+//            bundle.putString("ARTICLE_ID", article.articleId)
+//            bundle.putString("OWNER_ID", article.ownerId)
+            bundle.putString("TITLE", article.title)
+            bundle.putString("CONTENT", article.content)
+            bundle.putString("IMAGE", article.image)
+            bundle.putString("DATE", article.date)
+
+            intent.putExtras(bundle)
+
+            startActivity(intent)
+//            Log.e("Function init", it.toString())
+        }
+        rv_listArticleHorizontal.adapter = adapter
+    }
+
+    private fun checkConnection() {
+
+        /**
+         * Basically if there is an internet connection it will use apiGetArticle() method to get data from database
+         * but if there's no internet connection then it will load data from room local database to show data list
+         */
+        InternetCheck(object : InternetCheck.Consumer {
+            override fun accept(internet: Boolean?) {
+                if (internet!!) {
+                    apiGetHotArticle()
+                    apiGetDailyArtice()
+                } else {
+                    toast(context!!, "Tidak ada akses internet")
+
+                    //Model CALL HOT ARTICLE FROM LOCAL DATABASE
+                    viewModel.getHotArticle?.observe(viewLifecycleOwner, Observer { hotArticle ->
+                        hotArticle.let {
+                            adapter?.setData(it)
+                        }
+                        rv_listArticleHorizontal.layoutManager = LinearLayoutManager(context)
+                        rv_listArticleHorizontal.adapter = adapter
+                    })
+                }
+            }
+        })
+
     }
 
     private fun ViewProps() {
@@ -146,26 +210,10 @@ class HomeFragment : Fragment() {
                 for (snap in snapshot.children) {
                     val data = snap.getValue(ArticleModel::class.java)
 
+                    data?.key = snap.key!!
                     articleData.add(data!!)
                 }
-
-                rv_listArticle.layoutManager = LinearLayoutManager(context)
-                rv_listArticle.adapter =
-                    ArticleAdapter(context!!, articleData, "vertical") {
-                        val article = it
-
-                        val intent = Intent(context, ArticleDetail::class.java)
-
-                        val bundle = Bundle()
-                        bundle.putString("TITLE", article.title)
-                        bundle.putString("CONTENT", article.content)
-                        bundle.putString("IMAGE", article.image)
-                        bundle.putString("DATE", article.date)
-
-                        intent.putExtras(bundle)
-
-                        startActivity(intent)
-                    }
+                viewModel.insertAll(articleData)
 
             }
 

@@ -7,8 +7,10 @@ import com.ezyindustries.conews.Data.ArticleModel
 class ArticleRepository(private val articleDao: ArticleDao) {
     val allArticle: LiveData<List<ArticleModel>> = articleDao.getArticle()
 
-    suspend fun insert(articleModel: ArticleModel){
-        articleDao.insert(articleModel)
+    val hotArticle: LiveData<List<ArticleModel>> = articleDao.getHotArticle("hot")
+
+    suspend fun insert(article: ArticleModel){
+        articleDao.insert(article)
     }
 
     suspend fun insertAll(article: List<ArticleModel>) {

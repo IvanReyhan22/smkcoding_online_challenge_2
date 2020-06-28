@@ -5,14 +5,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ezyindustries.conews.Adapter.ArticleAdapter
 import com.ezyindustries.conews.Data.ArticleItem
@@ -20,6 +23,7 @@ import com.ezyindustries.conews.Data.ArticleModel
 import com.ezyindustries.conews.Retrofit.apiRequest
 import com.ezyindustries.conews.Retrofit.httpClient
 import com.ezyindustries.conews.Service.ArticleService
+import com.ezyindustries.conews.Util.InternetCheck
 import com.ezyindustries.conews.Util.toast
 import com.ezyindustries.conews.ViewModel.ArticleFragmentViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -31,13 +35,14 @@ import retrofit2.Response
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ExploreFragment : Fragment(){
+class ExploreFragment : Fragment() {
 
     private var timer = Timer()
     private val DELAY: Long = 1000 // in m
 
     lateinit var ref: DatabaseReference
-//    lateinit var articleData: ArrayList<ArticleModel>
+
+    // lateinit var articleData: ArrayList<ArticleModel>
     var articleData: MutableList<ArticleModel> = ArrayList()
     private val viewModel by viewModels<ArticleFragmentViewModel>()
     private var adapter: ArticleAdapter? = null
@@ -59,11 +64,17 @@ class ExploreFragment : Fragment(){
     override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.init(requireContext());
-        viewModel.allArticle.observe(viewLifecycleOwner, androidx.lifecycle.Observer { article ->
-            article?.let(adapter?.setData(it))
-        })
+        // Firebase initialization
+        ref = FirebaseDatabase.getInstance().getReference("Article")
 
+        init()
+        //Model Initialization
+        viewModel.init(requireContext())
+
+        //Internet connection access check
+        checkConnection()
+
+        //Put delay after typing before running next method
         inpt_search_article.afterTextChanged {
             timer = Timer()
             timer.schedule(object : TimerTask() {
@@ -73,18 +84,102 @@ class ExploreFragment : Fragment(){
             }, DELAY)
         }
 
+    }
 
-        apiGetArticle()
+    private fun checkConnection() {
+
+        /**
+         * Basically if there is an internet connection it will use apiGetArticle() method to get data from database
+         * but if there's no internet connection then it will load data from room local database to show data list
+         */
+        InternetCheck(object : InternetCheck.Consumer {
+            override fun accept(internet: Boolean?) {
+                if (internet!!) {
+                    apiGetArticle()
+                } else {
+                    toast(context!!, "Tidak ada akses internet")
+
+                    //Model CALL DATA FROM LOCAL DATABASE
+                    viewModel.allArticle?.observe(viewLifecycleOwner, Observer { article ->
+                        article.let {
+                            adapter?.setData(it)
+                            Log.e("DATA FROM VIEW MODEL", it.toString())
+                        }
+                        rv_listArticle.layoutManager = LinearLayoutManager(context)
+                        rv_listArticle.adapter = adapter
+                    })
+                }
+            }
+        })
+
     }
 
     private fun init() {
         rv_listArticle.layoutManager = LinearLayoutManager(context)
-        adapter = ArticleAdapter(requireContext(),articleData)
+        adapter = ArticleAdapter(requireContext(), articleData, "result") {
+            val article = it
+
+            val intent = Intent(context, ArticleDetail::class.java)
+
+            val bundle = Bundle()
+
+//            bundle.putString("ARTICLE_ID", article.articleId)
+//            bundle.putString("OWNER_ID", article.ownerId)
+            bundle.putString("TITLE", article.title)
+            bundle.putString("CONTENT", article.content)
+            bundle.putString("IMAGE", article.image)
+            bundle.putString("DATE", article.date)
+
+            intent.putExtras(bundle)
+
+            startActivity(intent)
+//            Log.e("Function init", it.toString())
+        }
         rv_listArticle.adapter = adapter
 //        adapter?.listener = this
     }
 
     private fun searchArticle() {
+
+        var search  = inpt_search_article.toString()
+
+        ref.orderByChild("title").startAt(search.toUpperCase()).endAt(search.toLowerCase() + "\uf8ff").addValueEventListener(object :ValueEventListener{
+
+            override fun onCancelled(error: DatabaseError) {
+                toast(context!!, "Connection Error")
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                articleData = java.util.ArrayList<ArticleModel>()
+                for (snap in snapshot.children) {
+                    val data = snap.getValue(ArticleModel::class.java)
+
+                    data?.key = snap.key!!
+                    articleData.add(data!!)
+                }
+
+                rv_listArticle.layoutManager = LinearLayoutManager(context)
+                rv_listArticle.adapter = ArticleAdapter(context!!, articleData, "result") {
+                    val article = it
+
+                    val intent = Intent(context, ArticleDetail::class.java)
+
+                    val bundle = Bundle()
+
+//                    bundle.putString("ARTICLE_ID", article.articleId)
+//                    bundle.putString("OWNER_ID", article.ownerId)
+                    bundle.putString("TITLE", article.title)
+                    bundle.putString("CONTENT", article.content)
+                    bundle.putString("IMAGE", article.image)
+                    bundle.putString("DATE", article.date)
+
+                    intent.putExtras(bundle)
+
+                    startActivity(intent)
+                }
+            }
+
+        })
 
 //        ===========================================NODEJS API===============================================
 //        val httpClient = httpClient()
@@ -124,8 +219,6 @@ class ExploreFragment : Fragment(){
 
     private fun apiGetArticle() {
 
-        ref = FirebaseDatabase.getInstance().getReference("Article")
-
         ref.addValueEventListener(object :
             ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
@@ -137,10 +230,21 @@ class ExploreFragment : Fragment(){
                 for (snap in snapshot.children) {
                     val data = snap.getValue(ArticleModel::class.java)
 
-                    data?.articleId = snap.key!!
+                    data?.key = snap.key!!
                     articleData.add(data!!)
                 }
+                //SAVE TO LOCAL DATABASE
                 viewModel.insertAll(articleData)
+
+                /**
+                 * For testing retrieve all data from local database
+                 */
+//                viewModel.allArticle?.observe(viewLifecycleOwner, Observer { article ->
+//                    article.let {
+//                        adapter?.setData(it)
+//                        Log.e("DATA INSERT ALL",it.toString())
+//                    }
+//                })
 
                 rv_listArticle.layoutManager = LinearLayoutManager(context)
                 rv_listArticle.adapter = ArticleAdapter(context!!, articleData, "result") {
