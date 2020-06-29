@@ -1,13 +1,12 @@
 package com.ezyindustries.conews
 
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,28 +16,26 @@ import com.ezyindustries.conews.Adapter.ArticleAdapter
 import com.ezyindustries.conews.Adapter.mData
 import com.ezyindustries.conews.Auth_Screen.Login
 import com.ezyindustries.conews.Data.ArticleModel
-import com.ezyindustries.conews.Data.UserData
 import com.ezyindustries.conews.Data.UserModel
-import com.ezyindustries.conews.Retrofit.apiRequest
-import com.ezyindustries.conews.Retrofit.httpClient
-import com.ezyindustries.conews.Service.AuthService
 import com.ezyindustries.conews.Util.InternetCheck
 import com.ezyindustries.conews.Util.toast
 import com.ezyindustries.conews.ViewModel.ArticleFragmentViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_profile.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 class ProfileFragment : Fragment() {
 
     lateinit var ref: DatabaseReference
     lateinit var auth: FirebaseAuth
     private lateinit var firebaseAuth: FirebaseAuth
+    lateinit var mGoogleSignInClient: GoogleSignInClient
+    lateinit var mGoogleSignInOptions: GoogleSignInOptions
 
     //    lateinit var articleData: ArrayList<ArticleModel>
     var articleData: MutableList<ArticleModel> = ArrayList()
@@ -68,6 +65,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         init()
+        configureGoogleSignIn()
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -81,11 +79,21 @@ class ProfileFragment : Fragment() {
         onClick()
     }
 
+    private fun configureGoogleSignIn() {
+//        37373210738-i5s5fmvi91osu9697m2dsllt2pg4etib.apps.googleusercontent.com
+        mGoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), mGoogleSignInOptions)
+    }
+
     private fun onClick() {
 
         logout.setOnClickListener {
 
-            FirebaseAuth.getInstance().signOut();
+            FirebaseAuth.getInstance().signOut()
+            mGoogleSignInClient.signOut()
 
             val data = mData(requireContext())
 
@@ -93,6 +101,8 @@ class ProfileFragment : Fragment() {
             data.removeString("USERNAME")
             data.removeString("USER_EMAIL")
             data.removeString("USER_PHOTO")
+
+            startActivity(ProfileFragment.getLaunchIntent(requireContext()))
 
             startActivity(Intent(context, Login::class.java))
             activity?.finish()
@@ -114,7 +124,7 @@ class ProfileFragment : Fragment() {
 
                 startActivity(intent)
             } else {
-                toast(requireContext(),"Maaf kak kamu butuh koneksi internet untuk update profil")
+                toast(requireContext(), "Maaf kak kamu butuh koneksi internet untuk update profil")
             }
         }
     }
@@ -269,15 +279,6 @@ class ProfileFragment : Fragment() {
         ref = FirebaseDatabase.getInstance().getReference("Article")
 
 
-
-
-
-
-
-
-
-
-
         ref.orderByChild("ownerId").equalTo(userId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
@@ -319,4 +320,11 @@ class ProfileFragment : Fragment() {
 
 
     }
+
+    companion object {
+        fun getLaunchIntent(from: Context) = Intent(from, Login::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        }
+    }
+
 }

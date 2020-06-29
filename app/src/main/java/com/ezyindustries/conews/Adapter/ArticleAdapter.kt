@@ -66,11 +66,17 @@ class ArticleAdapter(
 
         val ArticleId: String = items.get(position).articleId
         val OwnerId: String = items.get(position).ownerId
-        val Title: String = items.get(position).title
+        var Title: String = items.get(position).title
         val Content: String = items.get(position).content
         val Image: String = items.get(position).image
         val Category: String = items.get(position).category
         val Date: String = items.get(position).date
+
+        if(type.equals("vertical")) {
+            if (Title.length > 40) {
+                Title = Title.substring(0,40) + "..."
+            }
+        }
 
         holder.txtTitle.setText(Title)
         holder.txtDate.setText(Date)

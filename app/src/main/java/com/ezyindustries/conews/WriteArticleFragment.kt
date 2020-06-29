@@ -1,7 +1,12 @@
 package com.ezyindustries.conews
 
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -11,9 +16,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
-import com.ezyindustries.conews.Adapter.mData
 import com.ezyindustries.conews.Data.ArticleModel
 import com.ezyindustries.conews.Util.InternetCheck
 import com.ezyindustries.conews.Util.toast
@@ -25,7 +30,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_write_article.*
 import java.io.IOException
 import java.time.LocalDateTime
@@ -42,6 +46,8 @@ class WriteArticleFragment : Fragment() {
     private var storageReference: StorageReference? = null
     private lateinit var firebaseAuth: FirebaseAuth
     private var isInternetOk = false
+
+    private val random = Random()
 
     lateinit var ref: DatabaseReference
 
@@ -89,7 +95,7 @@ class WriteArticleFragment : Fragment() {
     private fun setOnClick() {
 
         submit_btn.setOnClickListener {
-            if (isInternetOk){
+            if (isInternetOk) {
                 uploadImage()
             } else {
                 toast(requireContext(), "Maaf kak kamu butuh koneksi internet untuk update profil")
@@ -103,6 +109,7 @@ class WriteArticleFragment : Fragment() {
         image_pick.setOnClickListener {
             imagePicker()
         }
+
 
     }
 
@@ -163,6 +170,7 @@ class WriteArticleFragment : Fragment() {
 
             ref.child(articleId).setValue(data).addOnCompleteListener {
 
+                sendMessageUpStream(inptTitle)
                 toast(requireContext(), "Succes post article")
                 resetForm()
 
@@ -184,6 +192,30 @@ class WriteArticleFragment : Fragment() {
         content.setText("")
     }
 
+    private fun sendMessageUpStream(message:String) {
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent = PendingIntent.getActivity(requireContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT)
+        val channelId = getString(R.string.default_notification_channel_id)
+        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val notificationBuilder = NotificationCompat.Builder(requireContext(),channelId)
+            .setSmallIcon(R.drawable.logo)
+            .setContentTitle("Berita terbaru tentang COVID-19")
+            .setContentText(message)
+            .setAutoCancel(true)
+            .setSound(defaultSoundUri)
+            .setContentIntent(pendingIntent)
+        val notificationManager = activity?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+            val channel = NotificationChannel(channelId, "Chanel human readable title",
+                NotificationManager.IMPORTANCE_HIGH)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        notificationManager.notify(0,notificationBuilder.build())
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
@@ -193,7 +225,8 @@ class WriteArticleFragment : Fragment() {
 
             filePath = data.data
             try {
-                val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, filePath)
+                val bitmap =
+                    MediaStore.Images.Media.getBitmap(requireContext().contentResolver, filePath)
                 image_preview.setImageBitmap(bitmap)
             } catch (e: IOException) {
                 e.printStackTrace()

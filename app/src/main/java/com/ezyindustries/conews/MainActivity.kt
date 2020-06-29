@@ -3,6 +3,8 @@ package com.ezyindustries.conews
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.ezyindustries.conews.Adapter.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -66,9 +68,7 @@ class MainActivity : AppCompatActivity() {
 
         tab_layout.setOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                TODO("not implemented")
-            }
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
                 tab!!.icon = ResourcesCompat.getDrawable(resources, offIcons[tab.position], null)
