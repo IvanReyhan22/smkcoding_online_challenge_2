@@ -32,13 +32,14 @@ import kotlinx.android.synthetic.main.fragment_explore.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File.separator
 import java.util.*
 import kotlin.collections.ArrayList
 
 class ExploreFragment : Fragment() {
 
     private var timer = Timer()
-    private val DELAY: Long = 1000 // in m
+    private val DELAY: Long = 1500 // in m
 
     lateinit var ref: DatabaseReference
 
@@ -65,7 +66,7 @@ class ExploreFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Firebase initialization
-        ref = FirebaseDatabase.getInstance().getReference("Article")
+        ref = FirebaseDatabase.getInstance().getReference()
 
         init()
         //Model Initialization
@@ -140,45 +141,54 @@ class ExploreFragment : Fragment() {
 
     private fun searchArticle() {
 
-        var search  = inpt_search_article.toString()
+        val search = inpt_search_article.text.toString()
 
-        ref.orderByChild("title").startAt(search.toUpperCase()).endAt(search.toLowerCase() + "\uf8ff").addValueEventListener(object :ValueEventListener{
+//        ref.orderByChild("title").startAt(search.toUpperCase()).endAt(search.toLowerCase() + "\uf8ff")
+        ref.child("Article")
+            .orderByChild("title")
+            .startAt(search)
+            .endAt(search+"\uf8ff")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
 
-            override fun onCancelled(error: DatabaseError) {
-                toast(context!!, "Connection Error")
-            }
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-                articleData = java.util.ArrayList<ArticleModel>()
-                for (snap in snapshot.children) {
-                    val data = snap.getValue(ArticleModel::class.java)
-
-                    data?.key = snap.key!!
-                    articleData.add(data!!)
+                override fun onCancelled(error: DatabaseError) {
+                    toast(context!!, "Connection Error")
                 }
 
-                rv_listArticle.layoutManager = LinearLayoutManager(context)
-                rv_listArticle.adapter = ArticleAdapter(context!!, articleData, "result") {
-                    val article = it
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    articleData = java.util.ArrayList<ArticleModel>()
+                    for (snap in snapshot.children) {
+                        val data = snap.getValue(ArticleModel::class.java)
 
-                    val intent = Intent(context, ArticleDetail::class.java)
+                        Log.e("title", data!!.title)
 
-                    val bundle = Bundle()
+                        data?.key = snap.key!!
+                        articleData.add(data!!)
+                    }
+
+                    Log.e("DATA", articleData.joinToString(separator = "\n"))
+
+                    rv_listArticle.layoutManager = LinearLayoutManager(context)
+                    rv_listArticle.adapter = ArticleAdapter(context!!, articleData, "result") {
+                        val article = it
+
+                        val intent = Intent(context, ArticleDetail::class.java)
+
+                        val bundle = Bundle()
 
 //                    bundle.putString("ARTICLE_ID", article.articleId)
 //                    bundle.putString("OWNER_ID", article.ownerId)
-                    bundle.putString("TITLE", article.title)
-                    bundle.putString("CONTENT", article.content)
-                    bundle.putString("IMAGE", article.image)
-                    bundle.putString("DATE", article.date)
+                        bundle.putString("TITLE", article.title)
+                        bundle.putString("CONTENT", article.content)
+                        bundle.putString("IMAGE", article.image)
+                        bundle.putString("DATE", article.date)
 
-                    intent.putExtras(bundle)
+                        intent.putExtras(bundle)
 
-                    startActivity(intent)
+                        startActivity(intent)
+                    }
                 }
-            }
 
-        })
+            })
 
 //        ===========================================NODEJS API===============================================
 //        val httpClient = httpClient()
@@ -218,7 +228,7 @@ class ExploreFragment : Fragment() {
 
     private fun apiGetArticle() {
 
-        ref.addValueEventListener(object :
+        ref.child("Article").addValueEventListener(object :
             ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 toast(context!!, "Connection Error")
