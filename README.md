@@ -11,4 +11,4 @@ Co.News Api
 https://github.com/IvanReyhan22/conews_api
 
 
-![alt text](https://raw.githubusercontent.com/LilZulf/Project_SMK_Coding_Team/master/blob/1_login.jpg)
+![alt text](https://raw.githubusercontent.com/LilZulf/Project_SMK_Coding_Team/master/blob/1_login.jpg){width="200px"}
